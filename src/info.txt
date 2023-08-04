@@ -1,0 +1,36 @@
+This text file goes through my thoughts in building the algorithm provided in index.ts.
+
+Instead of measuring whether the blades reach a certain threshold, I thought it would be more reliable to us the angle of the blades.
+This would also handle different orientations, or different scaled frames as the ratios would still remain the same.
+My algorithm relies on the fact that each frame provides the 3 points needed, and thus we can interpret the 3 points as a triangle.
+
+The algorithm proceeds as follows:
+- First, initialize the number of openings to be 0
+- It takes the first frame from the list of frames
+- Calculate the leg length (length of blade)
+- Calculate the base length (length of the gap between the blades)
+- Uses the Cosine law to compute the angle between the legs (blade angle)
+
+From the derived angle, we have a few cases:
+- If we are currently open (isOpen) and the angle is closed (= 0 degrees), we switch to closed and increment 1
+- If we are currently closed and the angle is past the open threshold (45 degrees), we switch to open
+- Otherwise, we do nothing and CONTINUE
+
+We repeat the process for the rest of the frames, and output the final count of openings.
+
+I chose 0 for the closing threshold (angle), to ensure that the algorithm does not count ALMOST closed ones.
+Similarly, I chose 45 degrees for the opening threshold, as I felt it was a good breaking point, based on rough estimations from the provided images.
+If in the future we find we want the threshold to be higher/lower as we find more edge cases, it is very easy to adjust.
+
+The algorithm counts the total number of times the blades open, then closed.
+
+Some extra questions to consider:
+
+What would be the other different orientations/cases that are possible?
+- As mentioned earlier, using the angle means the rotation and the scaling of the frame does not matter; it is only the ratios that determine the angle.
+How would you update your algorithm (if you need to) for these new cases in (1)
+- Thus, we would not need to change the algorithm for (1).
+For testing purposes, if you had to generate frames data, how would you go about it?
+- I would try to encompass as many different cases as possible; opening and closing in different orientations, different scalings are my immediate ideas for edge cases.
+- I would also want to test the behaviour on the borderlines; how does the code work when we go very close to the thresholds (ex. is 44 degrees closed? etc.)
+- Finally, I would take some examples from actual practice (for whatever the tool is used for), and see if the algorithm returns the same answers as what we want/expect.
